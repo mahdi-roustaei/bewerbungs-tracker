@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#172a25" />
+    <title>Bewerbungs-Tracker · Dein nächster Schritt</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23295b48'/%3E%3Cpath d='m8 17 6 6 11-14' fill='none' stroke='white' stroke-width='3'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="/assets/styles.css" />
+    <script src="/assets/app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Zum Inhalt</a>
+    <aside class="sidebar">
+      <a href="/" class="brand"
+        ><span class="brand-icon">↗</span
+        ><span>Bewerbungs<span class="brand-sub">TRACKER</span></span></a
+      >
+      <p class="nav-label">DEIN ARBEITSBEREICH</p>
+      <nav aria-label="Hauptnavigation">
+        <button class="nav-button active" id="view-active" aria-current="page">
+          <span>▦</span> Bewerbungen
+          <span id="nav-count" class="nav-count">0</span>
+        </button>
+        <button class="nav-button" id="view-due">
+          <span>◷</span> Wiedervorlagen
+        </button>
+        <button class="nav-button" id="view-archive">
+          <span>▤</span> Archiv
+        </button>
+      </nav>
+      <div class="sidebar-note">
+        <span class="little-dot"></span> Dein Fortschritt zählt.
+        <p>Ein Ort für deine Chancen.<br />Ein klarer nächster Schritt.</p>
+      </div>
+      <div class="local-note">
+        <span>◉</span> Lokal gespeichert<small
+          >Deine Daten bleiben bei dir.</small
+        >
+      </div>
+    </aside>
+    <main id="main">
+      <header class="topbar">
+        <span>DEIN WEG ZUM NÄCHSTEN JOB</span><span id="today"></span>
+      </header>
+      <section class="page-heading">
+        <div>
+          <p class="eyebrow">ALLES IM BLICK</p>
+          <h1 id="page-title">Deine Bewerbungen.</h1>
+          <p id="page-subtitle">Von der ersten Idee bis zur Zusage.</p>
+        </div>
+        <button class="button primary" id="new-application">
+          <span>＋</span> Neue Bewerbung
+        </button>
+      </section>
+      <section
+        class="stats"
+        aria-label="Statistik aller nicht archivierten Bewerbungen"
+      >
+        <article class="stat">
+          <span>Gesamt</span><strong id="stat-total">—</strong
+          ><small>nicht archivierte Bewerbungen</small>
+        </article>
+        <article class="stat">
+          <span>Im Gespräch <span class="stat-dot blue"></span></span
+          ><strong id="stat-interview">—</strong
+          ><small>Chancen persönlich kennenlernen</small>
+        </article>
+        <article class="stat">
+          <span>Zusagen <span class="stat-dot green"></span></span
+          ><strong id="stat-offer">—</strong
+          ><small>ein Schritt nach vorne</small>
+        </article>
+        <article class="stat accent">
+          <span>Wiedervorlagen <span>↗</span></span
+          ><strong id="stat-due">—</strong
+          ><small>heute oder früher fällig</small>
+        </article>
+      </section>
+      <section class="workspace">
+        <div class="section-heading">
+          <h2 id="list-title">Deine Chancen</h2>
+          <a class="export" href="/api/export.csv" download
+            >↓ CSV exportieren</a
+          >
+        </div>
+        <div class="toolbar">
+          <label class="search"
+            ><span aria-hidden="true">⌕</span
+            ><span class="sr-only">Firma, Position oder Ort suchen</span
+            ><input
+              id="search"
+              type="search"
+              placeholder="Firma, Position oder Ort suchen …"
+              maxlength="160" /></label
+          ><label class="filter"
+            ><span class="sr-only">Nach Status filtern</span
+            ><select id="status-filter">
+              <option value="">Alle Status</option>
+              <option value="saved">Vorgemerkt</option>
+              <option value="applied">Beworben</option>
+              <option value="interview">Im Gespräch</option>
+              <option value="offer">Zusage</option>
+              <option value="rejected">Absage</option>
+              <option value="withdrawn">Zurückgezogen</option>
+            </select></label
+          >
+        </div>
+        <div id="error" class="error" role="alert" hidden></div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>UNTERNEHMEN & POSITION</th>
+                <th>STATUS</th>
+                <th>BEWORBEN AM</th>
+                <th>WIEDERVORLAGE</th>
+                <th><span class="sr-only">Aktion</span></th>
+              </tr>
+            </thead>
+            <tbody id="applications"></tbody>
+          </table>
+        </div>
+        <div id="empty" class="empty" hidden>
+          <span>↗</span>
+          <h3>Platz für deinen nächsten Schritt.</h3>
+          <p id="empty-message">
+            Lege deine erste Bewerbung an und behalte alles im Blick.
+          </p>
+          <button class="button secondary" id="empty-create">
+            Erste Bewerbung anlegen
+          </button>
+        </div>
+        <div class="table-footer">
+          <span id="result-count" role="status" aria-live="polite"
+            >Wird geladen …</span
+          ><span>Schritt für Schritt weiter.</span>
+        </div>
+      </section>
+      <footer class="page-footer">
+        <span>Bewerbungs-Tracker <span class="version">v1.0</span></span
+        ><span>Mit Fokus auf deinen nächsten Schritt.</span>
+      </footer>
+    </main>
+    <dialog id="editor" aria-labelledby="dialog-title">
+      <form id="application-form">
+        <div class="dialog-heading">
+          <div>
+            <p class="eyebrow">DEINE NÄCHSTE CHANCE</p>
+            <h2 id="dialog-title">Neue Bewerbung</h2>
+          </div>
+          <button
+            type="button"
+            id="close-dialog"
+            class="icon-button"
+            aria-label="Schließen"
+          >
+            ×
+          </button>
+        </div>
+        <p class="form-hint">Firma und Position sind Pflichtfelder.</p>
+        <div class="form-grid">
+          <label
+            >Unternehmen *<input
+              name="company"
+              required
+              maxlength="120"
+              autocomplete="organization"
+              placeholder="z. B. Musterwerk GmbH"
+          /></label>
+          <label
+            >Position *<input
+              name="role"
+              required
+              maxlength="160"
+              placeholder="z. B. Werkstudent Backend"
+          /></label>
+          <label
+            >Ort<input
+              name="location"
+              maxlength="120"
+              placeholder="Hannover · Hybrid"
+          /></label>
+          <label
+            >Status<select name="status">
+              <option value="saved">Vorgemerkt</option>
+              <option value="applied">Beworben</option>
+              <option value="interview">Im Gespräch</option>
+              <option value="offer">Zusage</option>
+              <option value="rejected">Absage</option>
+              <option value="withdrawn">Zurückgezogen</option>
+            </select></label
+          >
+          <label>Beworben am<input name="applied_on" type="date" /></label
+          ><label>Wiedervorlage<input name="follow_up_on" type="date" /></label>
+          <label class="full"
+            >Link zur Stellenanzeige<input
+              name="job_url"
+              type="url"
+              maxlength="2083"
+              placeholder="https://…"
+          /></label>
+          <label class="full"
+            >Notizen<textarea
+              name="notes"
+              maxlength="5000"
+              rows="3"
+              placeholder="Nächster Schritt, Gesprächsvorbereitung, offene Fragen …"
+            ></textarea>
+          </label>
+        </div>
+        <section id="history-section" hidden>
+          <h3>Statusverlauf</h3>
+          <ol id="history" class="history"></ol>
+        </section>
+        <div id="form-error" class="error" role="alert" hidden></div>
+        <div class="dialog-actions">
+          <button type="button" id="archive-button" class="text-button" hidden>
+            Archivieren
+          </button>
+          <div>
+            <button type="button" id="cancel-dialog" class="button secondary">
+              Abbrechen</button
+            ><button type="submit" id="save-button" class="button primary">
+              Speichern
+            </button>
+          </div>
+        </div>
+      </form>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite" hidden></div>
+  </body>
+</html>

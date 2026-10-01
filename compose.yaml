@@ -1,0 +1,13 @@
+services:
+  tracker:
+    build: .
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      TRACKER_DB: /app/data/tracker.sqlite3
+      TZ: Europe/Berlin
+    volumes:
+      - tracker-data:/app/data
+    restart: unless-stopped
+volumes:
+  tracker-data:

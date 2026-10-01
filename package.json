@@ -1,0 +1,15 @@
+{
+  "devDependencies": {
+    "jsdom": "30.1.1"
+  },
+  "name": "bewerbungs-tracker",
+  "private": true,
+  "version": "1.0.0",
+  "description": "DOM tests for the no-build browser client",
+  "scripts": {
+    "test": "node --test test_ui.mjs"
+  },
+  "engines": {
+    "node": "^22.22.2 || ^24.15.0 || >=26.0.0"
+  }
+}
